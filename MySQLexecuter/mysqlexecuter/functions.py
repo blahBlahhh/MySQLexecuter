@@ -12,30 +12,30 @@ class Functions(object):
         except Exception:
             print('connect failed')
 
-    def showDatabase(self, password):
+    def disconnectDB(self):
+        connection.close()
+
+    def showDatabase(self):
         cursor.execute('SHOW DATABASES')
         data = cursor.fetchall()
-        connection.close()
         return data
 
-    def showTable(self, db_name, password):
+    def showTable(self):
         cursor.execute('SHOW TABLES')
         data = cursor.fetchall()
-        connection.close()
         return data
 
-    def showColumn(self, db_name, tb_name, password):
+    def showColumn(self, tb_name):
         sql = 'SHOW COLUMNS FROM %s' % tb_name
         cursor.execute(sql)
         rough_data = cursor.fetchall()
-        connection.close()
         data = []
         for rd in rough_data:
             data.append(rd[0])
         return data
 
-    def insertData(self, db_name, tb_name, password):
-        column = self.showColumn(db_name, tb_name, password)
+    def insertData(self, tb_name):
+        column = self.showColumn(tb_name)
         input_data = []
         for c in column:
             input_data.append(input(c + '?'))
@@ -43,33 +43,28 @@ class Functions(object):
         sql = 'INSERT INTO %s VALUES %s' % (tb_name, input_data)
         try:
             cursor.execute(sql)
-            connection.close()
             return 'Insertion succeeded!'
         except Exception:
-            connection.close()
             return 'Insertion failed!'
 
-    def deleteData(self, db_name, tb_name, password):
-        data = self.viewDetail(db_name, tb_name, password)
-        print(self.showColumn(db_name, tb_name, password))
+    def deleteData(self, tb_name):
+        data = self.viewDetail(tb_name)
+        print(self.showColumn(tb_name))
         for d in range(0, len(data)):
             print('%d. %s' % (d+1, data[d]))
         row = input('Which row do you want to delete?\n')
         sql = 'DELETE FROM %s WHERE id = %s' % (tb_name, row)
         try:
             cursor.execute(sql)
-            connection.close()
             return 'Deletion succeeded!'
         except Exception:
-            connection.close()
             return 'Deletion failed!'
 
-    def viewDetail(self, db_name, tb_name, password):
+    def viewDetail(self, tb_name):
         detail = input('Any details?\n')
         if detail == '':
             detail = '*'
         sql = 'SELECT %s FROM %s ' % (detail, tb_name)
         cursor.execute(sql)
         data = cursor.fetchall()
-        connection.close()
         return data

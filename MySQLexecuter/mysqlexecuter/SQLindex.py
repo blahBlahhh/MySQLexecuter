@@ -60,16 +60,14 @@ class Index(object):
 
         self.func.connectDB(password, db_name)
         input_data = int(input(ask))
-        if input_data == 1:
-            self.filt(switcher.get(input_data)(password))
-        elif input_data == 2:
-            self.filt(switcher.get(input_data)(db_name, password))
-        elif input_data in range(4, 6):
-            self.filt(switcher.get(input_data)(db_name, tb_name, password))
-        elif input_data == 3 or input_data == 6:
-            self.filt(switcher.get(input_data)(db_name, tb_name, password))
+        if input_data in range(1, 3):
+            self.filt(switcher.get(input_data)())
+        elif input_data in range(3, 7):
+            self.filt(switcher.get(input_data)(tb_name))
         else:
             print('Wrong number! Please enter a valid number.')
+
+        self.func.disconnectDB()
 
 
 if __name__ == '__main__':
