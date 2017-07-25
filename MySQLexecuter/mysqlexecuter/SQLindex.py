@@ -1,10 +1,12 @@
-import MySQLexecuter.functions
 import msvcrt
+
+import MySQLexecuter.mysqlexecuter.functions
+
 
 class Index(object):
 
     def __init__(self):
-        self.func = MySQLexecuter.functions.Functions()
+        self.func = MySQLexecuter.mysqlexecuter.functions.Functions()
 
     def filt(self, data):
         if str(type(data)) == "<class 'list'>":
@@ -56,6 +58,7 @@ class Index(object):
             6: self.func.viewDetail,
         }
 
+        self.func.connectDB(password, db_name)
         input_data = int(input(ask))
         if input_data == 1:
             self.filt(switcher.get(input_data)(password))
